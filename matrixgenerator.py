@@ -35,7 +35,8 @@ def save_to_file(filepath, dataset, name):
 # Separate data into Training, Cross-Validation, and Test
 # Create 3 lists that randomly shuffle filenames of data set
 def split_dataset(filepath):
-    filelist = os.listdir(filepath)
+    tmpfilelist = os.listdir(filepath)
+    filelist = [ fi for fi in tmpfilelist if not fi.endswith(".txt") ]
     total_num = len(filelist)
     train_num = int(round(len(filelist)*.7))
     xval_num = int(round(len(filelist)*.2))
@@ -56,14 +57,22 @@ def split_dataset(filepath):
 
 # To Do: Make generateMatrices() grab from train_set only
     
-def generateMatrices():
+def generateMatrices(filedict1,filedict2):
+    #give file dictionaries for folder1 and folder2 that you want to reference going in 
     X = np.empty((0,30000), 'uint8')
-    Y = np.empty((0,1),'uint8')	
-    #for all images in folder 1    
+    Y = np.empty((0,1),'uint8')	   
+    #for all images in folder 1  
+    #look in folder for text files that are relevant
           
     tmplabel = np.ones([1,1]) #folder 1 is positive examples
-    for imagefilename in os.listdir(folder1):
+    #open train_set.txt
+    with open(os.path.join(folder1,filedict1)) as f:
+        filelist = f.readlines()
+        # remove whitespace characters like `\n` at the end of each line
+        filelist = [x.strip() for x in filelist] 
+    for imagefilename in filelist:
       #load image
+      print(os.path.join(folder1,imagefilename)) 
       image = io.imread(os.path.join(folder1,imagefilename))
       #convert the data from 0-255 to -1 to 1
       image = (2/255)*image
@@ -76,18 +85,23 @@ def generateMatrices():
            
     #repeat for folder2
     tmplabel = np.zeros([1,1]) #folder 2 is negative examples
-    for imagefilename in os.listdir(folder2):
-      #load image
-      image = io.imread(os.path.join(folder2,imagefilename))
-      image = img_as_ubyte(image) #convert to 8bit
-      image = (2/255)*image
-      image = image -1
+    with open(os.path.join(folder2,filedict2)) as f:
+        filelist2 = f.readlines()
+        # remove whitespace characters like `\n` at the end of each line
+        filelist2 = [x.strip() for x in filelist2] 
+    for imagefilename in filelist2:
+        if imagefilename.endswith(".jpg"):
+            #load image
+            image = io.imread(os.path.join(folder2,imagefilename))
+            image = img_as_ubyte(image) #convert to 8bit
+            image = (2/255)*image
+            image = image -1
       
-      #reshape image newshape
-      datarow = np.reshape(image, (1,-1)) # make a 1 x m matrix where m is however many pixels
-                                # there are in the image
-      X=np.append(X,datarow,axis=0) #append onto the same matrix
-      Y=np.append(Y,tmplabel,axis=0)
+            #reshape image newshape
+            datarow = np.reshape(image, (1,-1)) # make a 1 x m matrix where m is however many pixels
+            # there are in the image
+            X=np.append(X,datarow,axis=0) #append onto the same matrix
+            Y=np.append(Y,tmplabel,axis=0)
       
     return X,Y
 
@@ -97,4 +111,4 @@ split_dataset(folder1)
 split_dataset(folder2)
 
 
-generateMatrices()
+generateMatrices('train_set.txt','train_set.txt')
