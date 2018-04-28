@@ -71,8 +71,7 @@ def generateMatrices(filedict1,filedict2):
         # remove whitespace characters like `\n` at the end of each line
         filelist = [x.strip() for x in filelist] 
     for imagefilename in filelist:
-      #load image
-      print(os.path.join(folder1,imagefilename)) 
+      #load image      
       image = io.imread(os.path.join(folder1,imagefilename))
       #convert the data from 0-255 to -1 to 1
       image = (2/255)*image
