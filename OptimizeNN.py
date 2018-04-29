@@ -5,12 +5,17 @@ Created on Sat Mar 17 16:26:19 2018
 @author: dzhang
 """
 
-import scipy.io
+import os
 import scipy.optimize as optimize
 import numpy as np
 import matrixgenerator as mg
 
-
+# Folder paths
+# Root directory 
+path_out = os.path.dirname(os.path.realpath('OptimizeNN.py'))
+folder_out = path_out+r'\output'
+if not os.path.exists(folder_out):
+    os.makedirs(folder_out)
 
 def fixlog(a):
     #helps correct for scenarios where log(0) results in infinity
@@ -32,6 +37,23 @@ def sigmoidgradient(z):
     z=np.clip(z,-100,1000) 
     g = sigmoid(z)*(1-sigmoid(z))
     return g
+
+def numGradient(theta,X,Y,lam,n2,n3):
+    #numerically calculate gradient
+    epsilon = 1e-4
+    m = theta.shape[0]    
+    print(m)
+    gradApprox = np.zeros(m)    
+    for i in range(0,m):
+        print(i,'still running, i promise')
+        thetaPlus = theta.copy();
+        thetaPlus[i] = thetaPlus[i] + epsilon;
+        thetaMinus = theta.copy();
+        thetaMinus[i] =  thetaMinus[i]- epsilon;
+        gradApprox[i] = ( NNCostFxn(thetaPlus,X,Y,lam,n2,n3)[0] -  NNCostFxn(thetaMinus,X,Y,lam,n2,n3)[0])/(2*epsilon)
+    #print(gradApprox)
+    return gradApprox
+
 
 #Gradient Function
 def NNGradFxn(theta,X,y,lam,n2,n3):
@@ -168,7 +190,7 @@ y = np.array(mat['y'], dtype=np.float64)
 n = mat['X'].shape[1]
 m = mat['X'].shape[0]'''
 
-X,y = mg.generateMatrices()
+X,y = mg.generateMatrices('train_set.txt','train_set.txt')
 X = X.astype(np.float64)
 y = y.astype(np.float64)
 m = X.shape[0]
@@ -193,6 +215,10 @@ tmpJ = NNCostFxn(initial_theta,X,y,lam,n2,n3)
 tmpG = NNGradFxn(initial_theta,X,y,lam,n2,n3)
 print('cost:',tmpJ,'gradients',tmpG)
 #Now that we know how to get gradients and costs, run gradient descent and
+#now that theta is optimized lets see how our gradients are doing
+'''newG = NNGradFxn(initial_theta,X,y,lam,n2,n3) for checking gradient function
+numG = numGradient(initial_theta,X,y,lam,n2,n3)
+print(newG[0],numG[0],'COMPARING ONE')'''
 
 #optimize our neural net
 #https://docs.scipy.org/doc/scipy-0.13.0/reference/generated/scipy.optimize.fmin_cg.html
@@ -205,8 +231,6 @@ opts = {'maxiter' : None,    # default value.
          'eps' : 1E-8}
          #'eps' : 1.4901161193847656e-08}  # default value.
 
-'''res2 = optimize.minimize(f, x0, jac=gradf, args=args,
-                          method='CG', options=opts)'''
 
 #combine Theta1 and Theta2 into one set of initial parameters
 
@@ -215,11 +239,29 @@ res2 = optimize.minimize(NNCostFxn, x0=initial_theta, jac=NNGradFxn, args=(X,y,l
 
 
 opt_theta = res2.x
- #unpack the thetas
+#store packed theta
+name='optimized_thetas.npy'
+np.save(os.path.join(folder_out,name),opt_theta)
+
+''' #now for cross validation
+X,y = mg.generateMatrices('xval_set.txt','xval_set.txt')
+X = X.astype(np.float64)
+y = y.astype(np.float64)
+m = X.shape[0]
+n = X.shape[1]
+
+n2 = 100                #number of neurons in hidden layer 
+n3 = 1                  #number of neurons in output layer
+lam = 1
+
+#unpack the thetas
 tTheta1 = opt_theta[0:n2*(n+1)]
 tTheta2 = opt_theta[n2*(n+1):len(opt_theta)]
 #reshape Theta1
 tTheta1 = tTheta1.reshape((n2,n+1)) #Theta1 is n2 (hidden layer neurons) by n(input pixels)
 #reshape Theta2
 tTheta2 = tTheta2.reshape((n3,n2+1)) #Theta2 is n3 (output columns) by n2 (hidden layer neurons)
-    
+
+#forwardprop using our optimized thetas
+
+xvalY = forwardprop.forwardprop(X, tTheta1, tTheta2)'''
