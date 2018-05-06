@@ -216,9 +216,12 @@ tmpG = NNGradFxn(initial_theta,X,y,lam,n2,n3)
 print('cost:',tmpJ,'gradients',tmpG)
 #Now that we know how to get gradients and costs, run gradient descent and
 #now that theta is optimized lets see how our gradients are doing
-'''newG = NNGradFxn(initial_theta,X,y,lam,n2,n3) for checking gradient function
+
+'''
+newG = NNGradFxn(initial_theta,X,y,lam,n2,n3) for checking gradient function
 numG = numGradient(initial_theta,X,y,lam,n2,n3)
-print(newG[0],numG[0],'COMPARING ONE')'''
+print(newG[0],numG[0],'COMPARING ONE')
+'''
 
 #optimize our neural net
 #https://docs.scipy.org/doc/scipy-0.13.0/reference/generated/scipy.optimize.fmin_cg.html
@@ -233,7 +236,7 @@ opts = {'maxiter' : None,    # default value.
 
 
 #combine Theta1 and Theta2 into one set of initial parameters
-'''
+
 res2 = optimize.minimize(NNCostFxn, x0=initial_theta, jac=NNGradFxn, args=(X,y,lam,n2,n3),
                           method='CG', options=opts)
 
@@ -261,11 +264,4 @@ tTheta2 = opt_theta[n2*(n+1):len(opt_theta)]
 tTheta1 = tTheta1.reshape((n2,n+1)) #Theta1 is n2 (hidden layer neurons) by n(input pixels)
 #reshape Theta2
 tTheta2 = tTheta2.reshape((n3,n2+1)) #Theta2 is n3 (output columns) by n2 (hidden layer neurons)
-<<<<<<< HEAD
-'''    
-=======
-
-#forwardprop using our optimized thetas
-
-xvalY = forwardprop.forwardprop(X, tTheta1, tTheta2)'''
->>>>>>> cf88bf82989d7f92fa029134a9f75cffdf8e63eb
+'''
