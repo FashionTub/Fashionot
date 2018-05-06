@@ -168,7 +168,7 @@ y = np.array(mat['y'], dtype=np.float64)
 n = mat['X'].shape[1]
 m = mat['X'].shape[0]'''
 
-X,y = mg.generateMatrices()
+X,y = mg.generateMatrices('train_set.txt','train_set.txt')
 X = X.astype(np.float64)
 y = y.astype(np.float64)
 m = X.shape[0]
@@ -205,11 +205,9 @@ opts = {'maxiter' : None,    # default value.
          'eps' : 1E-8}
          #'eps' : 1.4901161193847656e-08}  # default value.
 
-'''res2 = optimize.minimize(f, x0, jac=gradf, args=args,
-                          method='CG', options=opts)'''
 
 #combine Theta1 and Theta2 into one set of initial parameters
-
+'''
 res2 = optimize.minimize(NNCostFxn, x0=initial_theta, jac=NNGradFxn, args=(X,y,lam,n2,n3),
                           method='CG', options=opts)
 
@@ -222,4 +220,4 @@ tTheta2 = opt_theta[n2*(n+1):len(opt_theta)]
 tTheta1 = tTheta1.reshape((n2,n+1)) #Theta1 is n2 (hidden layer neurons) by n(input pixels)
 #reshape Theta2
 tTheta2 = tTheta2.reshape((n3,n2+1)) #Theta2 is n3 (output columns) by n2 (hidden layer neurons)
-    
+'''    
