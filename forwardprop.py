@@ -9,6 +9,8 @@ Created on Sat Mar 17 13:46:10 2018
 
 import numpy as np
 
+
+
 #sigmoid function
 def sigmoid(z):
     g = 1 / (1 + np.exp(-z))
@@ -25,6 +27,8 @@ def forwardprop(X, Theta1, Theta2):
     a3[a3 < .5] = 0
     return a3
 
+
+
 '''
 mat = scipy.io.loadmat('ex3data1.mat')
 
@@ -40,8 +44,7 @@ Theta2 = np.random.rand(n3, n2+1)*2 -1   #random initialization of Theta2
 '''
 
 
-#X.T.dot(y).shape Note for syntax
 
-#np.ones([m,1])
 
-#all indexes where true [i for i, x in enumerate(a3==1) if x]
+
+

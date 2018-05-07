@@ -27,7 +27,7 @@ imgpath2 = path+r'\images\unfashionable'
 # Compress function
 def compress_image(imgpath, savpath):
     #get list of files
-    filelist = os.listdir(imgpath)
+    filelist = [f for f in os.listdir(imgpath) if os.path.isfile(os.path.join(imgpath, f))]
 
     for filename in filelist:
         #os.chmod(imgpath, 0o777)
@@ -42,7 +42,7 @@ def compress_image(imgpath, savpath):
 # Mirror function
 def mirror_image(imgpath, savpath):
     #get list of files
-    filelist = os.listdir(imgpath)
+    filelist = [f for f in os.listdir(imgpath) if os.path.isfile(os.path.join(imgpath, f))]
 
     for filename in filelist:
         image_obj = Image.open(os.path.join(imgpath,filename))
@@ -55,7 +55,7 @@ def mirror_image(imgpath, savpath):
 # Convert all images to JPG
 def convert_jpg(imgpath):
     #get list of files
-    filelist = os.listdir(imgpath)
+    filelist = [f for f in os.listdir(imgpath) if os.path.isfile(os.path.join(imgpath, f))]
 
     for filename in filelist:
         image_obj = Image.open(os.path.join(imgpath,filename))
@@ -67,6 +67,8 @@ def convert_jpg(imgpath):
         if filename.endswith('.png'):
             os.remove(os.path.join(imgpath,filename))            
 
+'''
+#Below needs to go into another script that calls compress.py
 
 compress_image(imgpath1, folder1)
 compress_image(imgpath2, folder2)
@@ -82,4 +84,4 @@ convert_jpg(folder2)
 
 
 print ('Done')
-
+'''
