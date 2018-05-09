@@ -67,9 +67,11 @@ def convert_jpg(imgpath):
         if filename.endswith('.png'):
             os.remove(os.path.join(imgpath,filename))            
 
-'''
-#Below needs to go into another script that calls compress.py
+# Below needs to go into another script that calls compress.py
+# Uncomment and run to regenerate compressed images           
+# Need to put .txt files into Temp folder before running (error with filetype)
 
+'''
 compress_image(imgpath1, folder1)
 compress_image(imgpath2, folder2)
 

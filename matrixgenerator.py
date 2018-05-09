@@ -105,9 +105,9 @@ def generateMatrices(filedict1,filedict2):
     return X,Y
 
 #Fashionable dataset, y = 1
-split_dataset(folder1)
+'''split_dataset(folder1)'''
 #Un-fashionable dataset, y = 0
-split_dataset(folder2)
+'''split_dataset(folder2)'''
 
 
-generateMatrices('train_set.txt','train_set.txt')
+#generateMatrices('train_set.txt','train_set.txt')
